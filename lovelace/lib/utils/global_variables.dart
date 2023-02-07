@@ -18,7 +18,8 @@ const userPages = ResponsiveLayout(
     mobileScreenLayout: MobileScreenLayout(),
     webScreenLayout: WebScreenLayout());
 
-String baseUrl = "lovelace-server.lgf2111.repl.co";
+// String baseUrl = "lovelace-server.lgf2111.repl.co";
+String baseUrl = "lovelace-server.onrender.com";
 
 String checkDevice() {
   String baseUrl;
