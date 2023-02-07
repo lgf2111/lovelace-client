@@ -21,7 +21,7 @@ void main() async {
   final bool isFTL = json.decode(await storageMethods.read('isFTL') ?? 'false');
 
   // * Enable communication through HTTPS
-  ByteData data = await PlatformAssetBundle().load('assets/ca/cert.pem');
+  ByteData data = await PlatformAssetBundle().load('assets/ca/ec2-cert.pem');
   SecurityContext.defaultContext
       .setTrustedCertificatesBytes(data.buffer.asUint8List());
 
