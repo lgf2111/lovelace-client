@@ -20,8 +20,7 @@ const userPages = ResponsiveLayout(
 
 // String baseUrl = "lovelace-server.lgf2111.repl.co";
 // String baseUrl = "lovelace-server.onrender.com";
-String baseUrl =
-    "http://ec2-13-229-224-40.ap-southeast-1.compute.amazonaws.com/";
+String baseUrl = "ec2-13-229-224-40.ap-southeast-1.compute.amazonaws.com";
 
 String checkDevice() {
   String baseUrl;
