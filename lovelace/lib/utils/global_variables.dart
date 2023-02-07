@@ -18,9 +18,7 @@ const userPages = ResponsiveLayout(
     mobileScreenLayout: MobileScreenLayout(),
     webScreenLayout: WebScreenLayout());
 
-// String baseUrl = "lovelace-server.lgf2111.repl.co";
-// String baseUrl = "lovelace-server.onrender.com";
-// String baseUrl = "ec2-13-229-224-40.ap-southeast-1.compute.amazonaws.com";
+String baseUrl = "ec2-13-229-224-40.ap-southeast-1.compute.amazonaws.com";
 
 String checkDevice() {
   String baseUrl;
@@ -34,6 +32,6 @@ String checkDevice() {
   return url;
 }
 
-String baseUrl = checkDevice();
+// String baseUrl = checkDevice();
 
 enum Swipe { left, right, none }
