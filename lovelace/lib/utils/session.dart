@@ -18,7 +18,7 @@ class Session {
     }
 
     http.Response response =
-        await http.get(Uri.http(baseUrl, route), headers: headers);
+        await http.get(Uri.https(baseUrl, route), headers: headers);
     updateCookie(response);
     checkTokenExpired(response);
     return response.body;
@@ -39,7 +39,7 @@ class Session {
       print(hash);
       headers[HttpHeaders.contentTypeHeader] = 'multipart/form-data';
       http.MultipartRequest request =
-          http.MultipartRequest("POST", Uri.http(baseUrl, route));
+          http.MultipartRequest("POST", Uri.https(baseUrl, route));
       request.headers.addAll(headers);
       request.fields['payload'] = jsonEncode(data);
       request.fields['hash'] = hash;
@@ -50,7 +50,7 @@ class Session {
       headers[HttpHeaders.contentTypeHeader] =
           'application/json; charset=UTF-8';
 
-      http.Response response = await http.post(Uri.http(baseUrl, route),
+      http.Response response = await http.post(Uri.https(baseUrl, route),
           body: jsonEncode(data), headers: headers);
       updateCookie(response);
       checkTokenExpired(response);
