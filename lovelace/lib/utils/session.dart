@@ -6,20 +6,19 @@ import 'package:lovelace/utils/global_variables.dart';
 import 'package:crypto/crypto.dart';
 
 class Session {
-  final _storageMethods = StorageMethods();
-  final String _baseUrl = checkDevice();
+  StorageMethods storageMethods = StorageMethods();
 
   Map<String, String> headers = {};
 
   Future<String> get(String route) async {
-    dynamic cookie = await _storageMethods.read("cookie");
+    dynamic cookie = await storageMethods.read("cookie");
 
     if (cookie != null) {
       headers[HttpHeaders.cookieHeader] = cookie;
     }
 
     http.Response response =
-        await http.get(Uri.http(_baseUrl, route), headers: headers);
+        await http.get(Uri.https(baseUrl, route), headers: headers);
     updateCookie(response);
     checkTokenExpired(response);
     return response.body;
@@ -27,7 +26,7 @@ class Session {
 
   Future<String> post(String route, dynamic data,
       {bool isFilePath = false}) async {
-    dynamic cookie = await _storageMethods.read("cookie");
+    dynamic cookie = await storageMethods.read("cookie");
 
     if (cookie != null) {
       headers[HttpHeaders.cookieHeader] = cookie;
@@ -40,7 +39,7 @@ class Session {
       print(hash);
       headers[HttpHeaders.contentTypeHeader] = 'multipart/form-data';
       http.MultipartRequest request =
-          http.MultipartRequest("POST", Uri.http(_baseUrl, route));
+          http.MultipartRequest("POST", Uri.https(baseUrl, route));
       request.headers.addAll(headers);
       request.fields['payload'] = jsonEncode(data);
       request.fields['hash'] = hash;
@@ -51,7 +50,7 @@ class Session {
       headers[HttpHeaders.contentTypeHeader] =
           'application/json; charset=UTF-8';
 
-      http.Response response = await http.post(Uri.http(_baseUrl, route),
+      http.Response response = await http.post(Uri.https(baseUrl, route),
           body: jsonEncode(data), headers: headers);
       updateCookie(response);
       checkTokenExpired(response);
@@ -65,7 +64,7 @@ class Session {
       int index = rawCookie.indexOf(';');
       headers[HttpHeaders.cookieHeader] =
           (index == -1) ? rawCookie : rawCookie.substring(0, index);
-      bool isStored = await _storageMethods.write("cookie", rawCookie);
+      bool isStored = await storageMethods.write("cookie", rawCookie);
     }
   }
 
@@ -76,7 +75,7 @@ class Session {
       if (responseJson['message'] == "Token has expired !!") {
         List<String> deleteList = ["isLoggedIn", "isFTL", "cookie"];
         for (String key in deleteList) {
-          _storageMethods.delete(key);
+          storageMethods.delete(key);
         }
       }
     } catch (e) {

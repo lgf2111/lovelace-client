@@ -63,7 +63,7 @@ class _AccountSettingsScreenState extends State<AccountSettingsScreen> {
               onPressed: () async {
                 final response = await _backupMethods.readJsonFile();
                 message = "Restoring backed up data...";
-                // print(response); // expecting to return the messages in plaintext                
+                // print(response); // expecting to return the messages in plaintext
                 if (response == false) {
                   message = "No data found! Create a backup!";
                   print(message);
@@ -82,8 +82,8 @@ class _AccountSettingsScreenState extends State<AccountSettingsScreen> {
               label: "Logout",
               onPressed: () async {
                 // Make another back up before logging out in case
-                dynamic chatDataJson = await storageMethods.read("message");
-                List chatDataString = jsonDecode(chatDataJson);
+                // dynamic chatDataJson = await storageMethods.read("message");
+                // List chatDataString = jsonDecode(chatDataJson);
 
                 // Write data to file
                 // _backupMethods.writeJsonFile();

@@ -25,14 +25,13 @@ ChatStreamSocket streamSocket = ChatStreamSocket();
 void connectAndListen(
     String senderName, String receiverName, String keyName) async {
   dynamic cookie = await StorageMethods().read("cookie");
-  String baseUrl = checkDevice();
   StreamingSharedPreferences preferences =
       await StreamingSharedPreferences.instance;
   Preference<String> content =
       preferences.getString(keyName, defaultValue: "[]");
 
   socket_io.Socket socket = socket_io.io(
-      Uri.http(baseUrl, '/chat').toString(),
+      Uri.https(baseUrl, '/chat').toString(),
       socket_io.OptionBuilder().setTransports(['websocket']).setExtraHeaders({
         HttpHeaders.contentTypeHeader: 'application/json; charset=UTF-8',
         HttpHeaders.cookieHeader: cookie
@@ -66,7 +65,7 @@ void disconnect(String senderName, String receiverName, String keyName) async {
   String baseUrl = checkDevice();
 
   socket_io.Socket socket = socket_io.io(
-      Uri.http(baseUrl, '/chat').toString(),
+      Uri.https(baseUrl, '/chat').toString(),
       socket_io.OptionBuilder().setTransports(['websocket']).setExtraHeaders({
         HttpHeaders.contentTypeHeader: 'application/json; charset=UTF-8',
         HttpHeaders.cookieHeader: cookie
@@ -82,7 +81,7 @@ void sendingMessage(
   String baseUrl = checkDevice();
 
   socket_io.Socket socket = socket_io.io(
-      Uri.http(baseUrl, '/chat').toString(),
+      Uri.https(baseUrl, '/chat').toString(),
       socket_io.OptionBuilder().setTransports(['websocket']).setExtraHeaders({
         HttpHeaders.contentTypeHeader: 'application/json; charset=UTF-8',
         HttpHeaders.cookieHeader: cookie

@@ -18,6 +18,8 @@ const userPages = ResponsiveLayout(
     mobileScreenLayout: MobileScreenLayout(),
     webScreenLayout: WebScreenLayout());
 
+String baseUrl = "lovelace-server.lgf2111.repl.co";
+
 String checkDevice() {
   String baseUrl;
   int port = 3000;
