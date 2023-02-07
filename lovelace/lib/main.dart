@@ -1,11 +1,13 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:lovelace/resources/authenticate_methods.dart';
 import 'package:lovelace/resources/storage_methods.dart';
 import 'package:lovelace/responsive/mobile_screen_layout.dart';
 import 'package:lovelace/responsive/responsive_layout.dart';
 import 'package:lovelace/responsive/web_screen_layout.dart';
 import 'package:lovelace/screens/main/landing_screen.dart';
+import 'package:lovelace/screens/user/background_auth/lock_screen.dart';
 import 'package:lovelace/screens/user/initialise/init_display_name_screen.dart';
 import 'package:lovelace/utils/colors.dart';
 import 'package:flutter/services.dart';
@@ -45,6 +47,7 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   final ScreenCaptureEvent screenCaptureEvent = ScreenCaptureEvent();
+  final _navigatorKey = GlobalKey<NavigatorState>();  
   bool isJailBroken = false;
   bool canMockLocation = false;
   bool isRealDevice = true;
@@ -67,17 +70,22 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
     super.dispose();
   }
 
-  @override
+@override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     super.didChangeAppLifecycleState(state);
-    if (state == AppLifecycleState.detached)
+    Future isFTL = storageMethods.read("isFTL");
+    if (state == AppLifecycleState.resumed && isFTL == false ||
+        state == AppLifecycleState.inactive && isFTL == false) {
+      print(state);
+      final navigator = _navigatorKey.currentState;
+      if (navigator == null) return;
+      navigator
+          .push(MaterialPageRoute(builder: (context) => const LockScreen()));
+    } else {
       return;
-    else if (state == AppLifecycleState.resumed) {
-      // prompt user to do biometrics
     }
-    print(state.toString());
   }
-
+  
   @override
   Widget build(BuildContext context) {
     ThemeData themeData = ThemeData(
