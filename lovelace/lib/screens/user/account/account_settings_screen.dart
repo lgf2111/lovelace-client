@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:lovelace/models/user_detail.dart';
 import 'package:lovelace/resources/account_methods.dart';
 import 'package:lovelace/resources/backup_methods.dart';
 import 'package:lovelace/resources/storage_methods.dart';
@@ -75,18 +74,13 @@ class _AccountSettingsScreenState extends State<AccountSettingsScreen> {
                   content: Text(message),
                   backgroundColor: isSuccess ? blackColor : errorColor,
                 ));
-                // TODO: Send data in that back up copy to update function to update chat data
+                // Send the backup file data to secure storage
+                storageMethods.write("message", response);
               }),
           WideButton(
               icon: const Icon(Icons.exit_to_app, color: placeholderColor),
               label: "Logout",
               onPressed: () async {
-                // Make another back up before logging out in case
-                dynamic chatDataJson = await storageMethods.read("message");
-                List chatDataString = jsonDecode(chatDataJson);
-
-                // Write data to file
-                // _backupMethods.writeJsonFile();
                 setState(() {
                   isSuccess = true;
                 });

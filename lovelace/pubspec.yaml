@@ -70,6 +70,8 @@ dependencies:
   url_launcher: ^6.1.8
   safe_device: ^1.1.2
   location_permissions: ^4.0.1
+  rsa_encrypt: ^2.0.0
+  pointycastle: ^3.6.2
 
 dev_dependencies:
   flutter_test:

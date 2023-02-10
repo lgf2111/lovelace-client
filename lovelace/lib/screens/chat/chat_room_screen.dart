@@ -46,10 +46,16 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
   TextEditingController messageController = TextEditingController();
 
   Future<void> getContent() async {
+    StorageMethods storageMethods = StorageMethods();
+    dynamic overallContent = jsonDecode(await storageMethods.read("message")); 
+    if (overallContent.runtimeType == null) {
+      print('There are no messages');
+    }
+    overallContent.push(content!.getValue()); // this won't work
     preferences = await StreamingSharedPreferences.instance;
     content = preferences!.getString(keyName, defaultValue: "[]");
     setState(() {
-      initialData = content!.getValue();
+      initialData = overallContent;
     });
     print(initialData); // returns the messages in the chat
   }

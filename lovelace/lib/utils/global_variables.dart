@@ -27,6 +27,7 @@ String checkDevice() {
     baseUrl = "127.0.0.1";
   }
   String url = "$baseUrl:$port";
+  print(url);
   return url;
 }
 
