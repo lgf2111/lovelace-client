@@ -77,6 +77,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
     if (state == AppLifecycleState.resumed && isFTL == false ||
         state == AppLifecycleState.inactive && isFTL == false) {
       print(state);
+      print(state);
       final navigator = _navigatorKey.currentState;
       if (navigator == null) return;
       navigator
