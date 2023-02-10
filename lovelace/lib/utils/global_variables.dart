@@ -18,6 +18,8 @@ const userPages = ResponsiveLayout(
     mobileScreenLayout: MobileScreenLayout(),
     webScreenLayout: WebScreenLayout());
 
+String baseUrl = "ec2-13-229-224-40.ap-southeast-1.compute.amazonaws.com";
+
 String checkDevice() {
   String baseUrl;
   int port = 3000;
@@ -30,5 +32,7 @@ String checkDevice() {
   print(url);
   return url;
 }
+
+// String baseUrl = checkDevice();
 
 enum Swipe { left, right, none }

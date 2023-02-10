@@ -21,9 +21,9 @@ void main() async {
   final bool isFTL = json.decode(await storageMethods.read('isFTL') ?? 'false');
 
   // * Enable communication through HTTPS
-  ByteData data = await PlatformAssetBundle().load('assets/ca/cert.pem');
-  SecurityContext.defaultContext
-      .setTrustedCertificatesBytes(data.buffer.asUint8List());
+  // ByteData data = await PlatformAssetBundle().load('assets/ca/ec2-cert.pem');
+  // SecurityContext.defaultContext
+  //     .setTrustedCertificatesBytes(data.buffer.asUint8List());
 
   // * Set the device orientation to portrait
   SystemChrome.setPreferredOrientations([
@@ -47,7 +47,7 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   final ScreenCaptureEvent screenCaptureEvent = ScreenCaptureEvent();
-  final _navigatorKey = GlobalKey<NavigatorState>();  
+  final _navigatorKey = GlobalKey<NavigatorState>();
   bool isJailBroken = false;
   bool canMockLocation = false;
   bool isRealDevice = true;
@@ -70,7 +70,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
     super.dispose();
   }
 
-@override
+  @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     super.didChangeAppLifecycleState(state);
     Future isFTL = storageMethods.read("isFTL");
@@ -85,7 +85,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
       return;
     }
   }
-  
+
   @override
   Widget build(BuildContext context) {
     ThemeData themeData = ThemeData(

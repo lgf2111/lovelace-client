@@ -62,7 +62,7 @@ class _AccountSettingsScreenState extends State<AccountSettingsScreen> {
               onPressed: () async {
                 final response = await _backupMethods.readJsonFile();
                 message = "Restoring backed up data...";
-                // print(response); // expecting to return the messages in plaintext                
+                // print(response); // expecting to return the messages in plaintext
                 if (response == false) {
                   message = "No data found! Create a backup!";
                   print(message);
@@ -81,9 +81,6 @@ class _AccountSettingsScreenState extends State<AccountSettingsScreen> {
               icon: const Icon(Icons.exit_to_app, color: placeholderColor),
               label: "Logout",
               onPressed: () async {
-                setState(() {
-                  isSuccess = true;
-                });
                 UserStateMethods().logoutState(context);
                 _storageMethods.readAllJson().then((value) => print(value));
               })

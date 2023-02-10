@@ -25,7 +25,6 @@ ChatStreamSocket streamSocket = ChatStreamSocket();
 void connectAndListen(
     String senderName, String receiverName, String keyName) async {
   dynamic cookie = await StorageMethods().read("cookie");
-  String baseUrl = checkDevice();
   StreamingSharedPreferences preferences =
       await StreamingSharedPreferences.instance;
   Preference<String> content =
