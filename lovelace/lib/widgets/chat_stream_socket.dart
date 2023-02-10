@@ -31,7 +31,7 @@ void connectAndListen(
       preferences.getString(keyName, defaultValue: "[]");
 
   socket_io.Socket socket = socket_io.io(
-      Uri.https(baseUrl, '/chat').toString(),
+      Uri.http(baseUrl, '/chat').toString(),
       socket_io.OptionBuilder().setTransports(['websocket']).setExtraHeaders({
         HttpHeaders.contentTypeHeader: 'application/json; charset=UTF-8',
         HttpHeaders.cookieHeader: cookie
@@ -65,7 +65,7 @@ void disconnect(String senderName, String receiverName, String keyName) async {
   String baseUrl = checkDevice();
 
   socket_io.Socket socket = socket_io.io(
-      Uri.https(baseUrl, '/chat').toString(),
+      Uri.http(baseUrl, '/chat').toString(),
       socket_io.OptionBuilder().setTransports(['websocket']).setExtraHeaders({
         HttpHeaders.contentTypeHeader: 'application/json; charset=UTF-8',
         HttpHeaders.cookieHeader: cookie
@@ -81,7 +81,7 @@ void sendingMessage(
   String baseUrl = checkDevice();
 
   socket_io.Socket socket = socket_io.io(
-      Uri.https(baseUrl, '/chat').toString(),
+      Uri.http(baseUrl, '/chat').toString(),
       socket_io.OptionBuilder().setTransports(['websocket']).setExtraHeaders({
         HttpHeaders.contentTypeHeader: 'application/json; charset=UTF-8',
         HttpHeaders.cookieHeader: cookie
