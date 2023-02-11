@@ -246,7 +246,7 @@ class _UpdateUserDetailsScreenState extends State<UpdateUserDetailsScreen> {
                           ? (_dpIsLoading
                               ? "assets/images/default-profile-picture.png"
                               : Image.memory(Uint8List.fromList(
-                                      base64.decode(profilePic)))
+                                      base64.decode(displayPic)))
                                   .image)
                           : Image.file(_dpImage!).image,
                       name: _newDisplayNameController.text,
@@ -304,8 +304,6 @@ class _UpdateUserDetailsScreenState extends State<UpdateUserDetailsScreen> {
                       String output = response[0];
                       String message = response[1];
                       bool isSuccess = response[2];
-
-                      print(output);
 
                       // show snackbar to show the result of the update
                       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
