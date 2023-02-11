@@ -15,12 +15,20 @@ class ProfileCard extends StatelessWidget {
         children: [
           Positioned.fill(
             child: ClipRRect(
-              borderRadius: BorderRadius.circular(10),
-              child: Image.asset(
-                profile.imageAsset,
-                fit: BoxFit.fitHeight,
-              ),
-            ),
+                borderRadius: BorderRadius.circular(10),
+                child: Container(
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      image: profile.displayPic,
+                      fit: BoxFit.fitHeight,
+                    ),
+                  ),
+                )
+                // Image.asset(
+                //   profile.displayPic,
+                //   fit: BoxFit.fitHeight,
+                // ),
+                ),
           ),
           Positioned(
             bottom: 0,
@@ -54,7 +62,7 @@ class ProfileCard extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      profile.distance,
+                      profile.description,
                       style: const TextStyle(
                         fontFamily: 'Nunito',
                         fontWeight: FontWeight.w400,
