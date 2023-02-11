@@ -18,8 +18,8 @@ const userPages = ResponsiveLayout(
     mobileScreenLayout: MobileScreenLayout(),
     webScreenLayout: WebScreenLayout());
 
-// String baseUrl = "ec2-13-229-224-40.ap-southeast-1.compute.amazonaws.com";
-String baseUrl = checkDevice();
+String baseUrl = "ec2-13-229-224-40.ap-southeast-1.compute.amazonaws.com";
+// String baseUrl = checkDevice();
 
 String checkDevice() {
   String baseUrl;
