@@ -49,20 +49,23 @@ class _CardsStackWidgetState extends State<CardsStackWidget>
   ValueNotifier<Swipe> swipeNotifier = ValueNotifier(Swipe.none);
   late final AnimationController _animationController;
 
-  void initProfileList() async {
+  void getProfileList() async {
     List<Profile> profileList_ = [];
     List<dynamic> getProfileList = await recoMethods.getProfileList();
     Map<dynamic, dynamic> getProfileListJson = json.decode(getProfileList[0]);
     List<dynamic> resultsJson = getProfileListJson['results'];
     for (int i = 0; i < resultsJson.length; i++) {
       List keyList = resultsJson[i].keys.toList();
-      if (keyList.contains('display_name') &&
+      if (keyList.contains('email') &&
+          keyList.contains('display_name') &&
           keyList.contains('birthday') &&
           keyList.contains('display_pic')) {
+        String email = resultsJson[i]['email'];
         String displayName = resultsJson[i]['display_name'];
         String birthday = resultsJson[i]['birthday'];
         String displayPicString = resultsJson[i]['display_pic'];
-        if (displayName == null ||
+        if (email == null ||
+            displayName == null ||
             birthday == null ||
             displayPicString == null) {
           continue;
@@ -71,7 +74,10 @@ class _CardsStackWidgetState extends State<CardsStackWidget>
             Image.memory(Uint8List.fromList(base64.decode(displayPicString)))
                 .image;
         profileList_.add(Profile(
-            name: displayName, description: birthday, displayPic: displayPic));
+            email: email,
+            name: displayName,
+            description: birthday,
+            displayPic: displayPic));
       }
       // print(keyList);
     }
@@ -84,18 +90,25 @@ class _CardsStackWidgetState extends State<CardsStackWidget>
   @override
   void initState() {
     super.initState();
-    initProfileList();
-    print("profileList: $profileList");
-    // print("draggableItems: $draggableItems");
+    getProfileList();
     _animationController = AnimationController(
       duration: const Duration(milliseconds: 500),
       vsync: this,
     );
     _animationController.addStatusListener((status) {
       if (status == AnimationStatus.completed) {
-        print(swipeNotifier.value);
+        String targetEmail = profileList.last.email;
+        print("${swipeNotifier.value} $targetEmail");
+        if (swipeNotifier.value == Swipe.right) {
+          Map<String, String> emailFormat = {'target_email': targetEmail};
+          recoMethods.request(email: emailFormat);
+        }
+        ;
+
         profileList.removeLast();
-        // draggableItems.removeLast();
+        if (profileList.isEmpty) {
+          getProfileList();
+        }
         _animationController.reset();
         swipeNotifier.value = Swipe.none;
       }

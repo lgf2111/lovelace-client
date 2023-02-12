@@ -73,6 +73,7 @@ class Session {
     try {
       dynamic responseJson = json.decode(responseBody);
       if (responseJson['message'] == "Token has expired !!") {
+        print("checkTokenExpired: Token has expired !!");
         List<String> deleteList = ["isLoggedIn", "isFTL", "cookie"];
         for (String key in deleteList) {
           storageMethods.delete(key);
