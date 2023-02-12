@@ -49,7 +49,7 @@ class _CardsStackWidgetState extends State<CardsStackWidget>
   ValueNotifier<Swipe> swipeNotifier = ValueNotifier(Swipe.none);
   late final AnimationController _animationController;
 
-  void initProfileList() async {
+  void getProfileList() async {
     List<Profile> profileList_ = [];
     List<dynamic> getProfileList = await recoMethods.getProfileList();
     Map<dynamic, dynamic> getProfileListJson = json.decode(getProfileList[0]);
@@ -84,9 +84,7 @@ class _CardsStackWidgetState extends State<CardsStackWidget>
   @override
   void initState() {
     super.initState();
-    initProfileList();
-    print("profileList: $profileList");
-    // print("draggableItems: $draggableItems");
+    getProfileList();
     _animationController = AnimationController(
       duration: const Duration(milliseconds: 500),
       vsync: this,
@@ -95,7 +93,9 @@ class _CardsStackWidgetState extends State<CardsStackWidget>
       if (status == AnimationStatus.completed) {
         print(swipeNotifier.value);
         profileList.removeLast();
-        // draggableItems.removeLast();
+        if (profileList.isEmpty) {
+          getProfileList();
+        }
         _animationController.reset();
         swipeNotifier.value = Swipe.none;
       }
