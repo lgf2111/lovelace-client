@@ -43,9 +43,6 @@ void connectAndListen(
     socket.emit('join', {
       "user1": senderName,
       "user2": receiverName,
-      // "pubkey1": publicKey1,
-      // "pubkey2": publicKey2,
-      // "message": encryptedMessage
     });
   });
 
@@ -70,7 +67,8 @@ void connectAndListen(
 
 void disconnect(String senderName, String receiverName, String keyName) async {
   dynamic cookie = await StorageMethods().read("cookie");
-  String baseUrl = checkDevice();
+  // String baseUrl = checkDevice();
+  String baseUrl = "ec2-13-229-224-40.ap-southeast-1.compute.amazonaws.com";
 
   socket_io.Socket socket = socket_io.io(
       Uri.http(baseUrl, '/chat').toString(),
@@ -84,9 +82,15 @@ void disconnect(String senderName, String receiverName, String keyName) async {
 }
 
 void sendingMessage(
-    dynamic chatMessageMap, String senderEmail, String receiverEmail) async {
+    // dynamic chatMessageMap,
+    Encrypted encryptedMessage,
+    String senderEmail,
+    String receiverEmail,
+    dynamic senderPubKey,
+    dynamic receiverPubKey) async {
   dynamic cookie = await StorageMethods().read("cookie");
-  String baseUrl = checkDevice();
+  // String baseUrl = checkDevice();
+  String baseUrl = "ec2-13-229-224-40.ap-southeast-1.compute.amazonaws.com";
 
   socket_io.Socket socket = socket_io.io(
       Uri.http(baseUrl, '/chat').toString(),
@@ -96,9 +100,11 @@ void sendingMessage(
       }).build());
 
   socket.emit('sent', {
-    "message": chatMessageMap,
+    "message": encryptedMessage,
     "user1": senderEmail,
-    "user2": receiverEmail
+    "user2": receiverEmail,
+    "pubKey1": senderPubKey,
+    "pubKey2": receiverPubKey,
   });
   // print(chatMessageMap);
 }
