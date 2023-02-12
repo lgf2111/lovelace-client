@@ -36,7 +36,7 @@ class BackupMethods {
     // print(jsonString); // return the ciphertext as a String
     // print(jsonString.runtimeType); // returns String
     var plaintext = await aeSkeyMethods.decryptAES(jsonString); // decrypt the ciphertext
-    print(plaintext.runtimeType);
+    // print(plaintext.runtimeType);
     print(plaintext);
     // Map<String, dynamic> jsonMap = jsonDecode(jsonString);
     debugPrint('Data read from JSON file');

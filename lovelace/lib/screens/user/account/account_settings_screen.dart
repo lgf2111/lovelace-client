@@ -63,19 +63,21 @@ class _AccountSettingsScreenState extends State<AccountSettingsScreen> {
                 final response = await _backupMethods.readJsonFile();
                 message = "Restoring backed up data...";
                 // print(response); // expecting to return the messages in plaintext
-                if (response == false) {
-                  message = "No data found! Create a backup!";
+                if (response == false) { // if there is no backup file
+                  message = "No backup file found! Create a backup!";
                   print(message);
                   setState(() {
                     isSuccess = false;
                   });
+                } else { // if there is a backup file
+                  storageMethods.write("message", response);
                 }
                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                   content: Text(message),
                   backgroundColor: isSuccess ? blackColor : errorColor,
                 ));
                 // Send the backup file data to secure storage
-                storageMethods.write("message", response);
+                storageMethods.read("message");
               }),
           WideButton(
               icon: const Icon(Icons.exit_to_app, color: placeholderColor),
