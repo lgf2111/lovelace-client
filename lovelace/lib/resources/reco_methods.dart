@@ -33,4 +33,32 @@ class RecoMethods {
 
     return [output, message, isSuccess];
   }
+
+  Future<List> request({required Map<String, String> email}) async {
+    String output;
+    String message = "An error occurred";
+    bool isSuccess = false;
+
+    try {
+      output = await session.post('/recommendation/request', email);
+      try {
+        dynamic outputJson = json.decode(output);
+
+        if (outputJson['results'] != null) {
+          isSuccess = true;
+          message = "Request successful";
+        } else {
+          message = outputJson['response'];
+        }
+      } catch (e) {
+        message = "An error occurred";
+      }
+    } catch (e) {
+      output = e.toString();
+    }
+
+    print("request's output: $output");
+
+    return [output, message, isSuccess];
+  }
 }
