@@ -1,7 +1,8 @@
+import 'dart:async';
 import 'dart:convert';
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:lovelace/resources/authenticate_methods.dart';
+import 'package:lovelace/resources/backup_methods.dart';
 import 'package:lovelace/resources/storage_methods.dart';
 import 'package:lovelace/responsive/mobile_screen_layout.dart';
 import 'package:lovelace/responsive/responsive_layout.dart';
@@ -30,6 +31,14 @@ void main() async {
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
   ]).then((value) => runApp(MyApp(isLoggedIn: isLoggedIn, isFTL: isFTL)));
+
+  //* Backup chat data every 24 hours
+  Timer.periodic(const Duration(days: 1), (timer) async {
+    dynamic chatDataJson = await StorageMethods().read("message");
+    // print(chatDataJson.runtimeType); // returns Future<dynamic>
+    dynamic chatDataString = jsonDecode(chatDataJson);
+    BackupMethods().writeJsonFile(chatDataString);
+  });
 }
 
 class MyApp extends StatefulWidget {
@@ -70,22 +79,44 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
     super.dispose();
   }
 
+  // @override
+  // void didChangeAppLifecycleState(AppLifecycleState state) {
+  //   super.didChangeAppLifecycleState(state);
+  //   Future isFTL = storageMethods.read("isFTL");
+  //   if (state == AppLifecycleState.resumed ||
+  //       state == AppLifecycleState.inactive ||
+  //       state == AppLifecycleState.paused) {
+  //     print(state);
+  //     final navigator = _navigatorKey.currentState;
+  //     navigator
+  //         ?.push(MaterialPageRoute(builder: (context) => const LockScreen()));
+  //   } else {
+  //     print(state);
+  //     return;
+  //   }
+  // }
+
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     super.didChangeAppLifecycleState(state);
     Future isFTL = storageMethods.read("isFTL");
-    if (state == AppLifecycleState.resumed && isFTL == false ||
-        state == AppLifecycleState.inactive && isFTL == false) {
+    if (state == AppLifecycleState.resumed && (isFTL == false || isFTL == null) ||
+        state == AppLifecycleState.inactive && (isFTL == false || isFTL == null)) {
       print(state);
       final navigator = _navigatorKey.currentState;
-      if (navigator == null) return;
+      if (navigator == null) {
+        print('navigator is null!');
+        return;
+      }
       navigator
           .push(MaterialPageRoute(builder: (context) => const LockScreen()));
     } else {
+      print('in else block');
+      print(state);
       return;
     }
   }
-
+  
   @override
   Widget build(BuildContext context) {
     ThemeData themeData = ThemeData(
@@ -105,6 +136,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
 
     MaterialApp materialApp = MaterialApp(
         debugShowCheckedModeBanner: true,
+        navigatorKey: _navigatorKey,
         title: 'Lovelace',
         theme: themeData,
         home: home);

@@ -137,8 +137,8 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
       oldContent.add(chatMessageMap);
       String newContent = json.encode(oldContent);
       content!.setValue(newContent);
-      // print('newContent: ${newContent.runtimeType}'); // return String
       Encrypted cipherText = await rsAkeyMethods.encryptRSA(newContent);
+      // TODO: Send encrypted message and public key to server side
       // rsAkeyMethods.decryptRSA(cipherText);
       chatMessageMap.addAll({
         "room": keyName,
