@@ -4,7 +4,6 @@ import 'dart:io';
 import 'package:encrypt/encrypt.dart';
 import 'package:lovelace/resources/storage_methods.dart';
 import 'package:lovelace/utils/global_variables.dart';
-import 'package:pointycastle/pointycastle.dart';
 import 'package:socket_io_client/socket_io_client.dart' as socket_io;
 import 'package:streaming_shared_preferences/streaming_shared_preferences.dart';
 

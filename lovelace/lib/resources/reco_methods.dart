@@ -13,6 +13,7 @@ class RecoMethods {
 
     try {
       output = await session.get('/recommendation');
+      print(output);
       try {
         dynamic outputJson = json.decode(output);
 
