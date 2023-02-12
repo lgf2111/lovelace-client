@@ -16,10 +16,8 @@ class Session {
     if (cookie != null) {
       headers[HttpHeaders.cookieHeader] = cookie;
     }
-    print('test');
     http.Response response =
         await http.get(Uri.http(baseUrl, route), headers: headers);
-    print('before');
     updateCookie(response);
     checkTokenExpired(response);
     return response.body;
