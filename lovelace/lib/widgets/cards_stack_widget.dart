@@ -1,3 +1,7 @@
+import 'dart:convert';
+import 'dart:typed_data';
+
+import 'package:lovelace/resources/reco_methods.dart';
 import 'package:lovelace/utils/global_variables.dart';
 import 'package:lovelace/widgets/profile.dart';
 import 'package:lovelace/widgets/action_button_widget.dart';
@@ -13,39 +17,76 @@ class CardsStackWidget extends StatefulWidget {
 
 class _CardsStackWidgetState extends State<CardsStackWidget>
     with SingleTickerProviderStateMixin {
-  List<Profile> draggableItems = [
-    const Profile(
-        name: 'Shin',
-        distance: 'Sitting Right Beside you',
-        imageAsset: 'assets/images/avatar_1.png'),
-    const Profile(
-        name: 'Rohini',
-        distance: '10 miles away',
-        imageAsset: 'assets/images/avatar_2.png'),
-    const Profile(
-        name: 'Rohini',
-        distance: '10 miles away',
-        imageAsset: 'assets/images/avatar_3.png'),
-    const Profile(
-        name: 'Rohini',
-        distance: '10 miles away',
-        imageAsset: 'assets/images/avatar_4.png'),
-    const Profile(
-        name: 'Guan Feng',
-        distance: '5 miles away',
-        imageAsset: 'assets/images/avatar_5.png'),
-    const Profile(
-        name: 'Shin',
-        distance: 'Sitting Right Beside you',
-        imageAsset: 'assets/images/avatar_6.png'),
-  ];
+  RecoMethods recoMethods = RecoMethods();
+  List<Profile> profileList = [];
+  // List<Profile> draggableItems = [
+  //   const Profile(
+  //       name: 'Shin',
+  //       description: 'Sitting Right Beside you',
+  //       displayPic: 'assets/images/avatar_1.png'),
+  //   const Profile(
+  //       name: 'Rohini',
+  //       description: '10 miles away',
+  //       displayPic: 'assets/images/avatar_2.png'),
+  //   const Profile(
+  //       name: 'Rohini',
+  //       description: '10 miles away',
+  //       displayPic: 'assets/images/avatar_3.png'),
+  //   const Profile(
+  //       name: 'Rohini',
+  //       description: '10 miles away',
+  //       displayPic: 'assets/images/avatar_4.png'),
+  //   const Profile(
+  //       name: 'Guan Feng',
+  //       description: '5 miles away',
+  //       displayPic: 'assets/images/avatar_5.png'),
+  //   const Profile(
+  //       name: 'Shin',
+  //       description: 'Sitting Right Beside you',
+  //       displayPic: 'assets/images/avatar_6.png'),
+  // ];
 
   ValueNotifier<Swipe> swipeNotifier = ValueNotifier(Swipe.none);
   late final AnimationController _animationController;
 
+  void initProfileList() async {
+    List<Profile> profileList_ = [];
+    List<dynamic> getProfileList = await recoMethods.getProfileList();
+    Map<dynamic, dynamic> getProfileListJson = json.decode(getProfileList[0]);
+    List<dynamic> resultsJson = getProfileListJson['results'];
+    for (int i = 0; i < resultsJson.length; i++) {
+      List keyList = resultsJson[i].keys.toList();
+      if (keyList.contains('display_name') &&
+          keyList.contains('birthday') &&
+          keyList.contains('display_pic')) {
+        String displayName = resultsJson[i]['display_name'];
+        String birthday = resultsJson[i]['birthday'];
+        String displayPicString = resultsJson[i]['display_pic'];
+        if (displayName == null ||
+            birthday == null ||
+            displayPicString == null) {
+          continue;
+        }
+        ImageProvider displayPic =
+            Image.memory(Uint8List.fromList(base64.decode(displayPicString)))
+                .image;
+        profileList_.add(Profile(
+            name: displayName, description: birthday, displayPic: displayPic));
+      }
+      // print(keyList);
+    }
+    print(profileList_);
+    setState(() {
+      profileList = profileList_;
+    });
+  }
+
   @override
   void initState() {
     super.initState();
+    initProfileList();
+    print("profileList: $profileList");
+    // print("draggableItems: $draggableItems");
     _animationController = AnimationController(
       duration: const Duration(milliseconds: 500),
       vsync: this,
@@ -53,7 +94,8 @@ class _CardsStackWidgetState extends State<CardsStackWidget>
     _animationController.addStatusListener((status) {
       if (status == AnimationStatus.completed) {
         print(swipeNotifier.value);
-        draggableItems.removeLast();
+        profileList.removeLast();
+        // draggableItems.removeLast();
         _animationController.reset();
         swipeNotifier.value = Swipe.none;
       }
@@ -72,8 +114,8 @@ class _CardsStackWidgetState extends State<CardsStackWidget>
             builder: (context, swipe, _) => Stack(
               clipBehavior: Clip.none,
               alignment: Alignment.center,
-              children: List.generate(draggableItems.length, (index) {
-                if (index == draggableItems.length - 1) {
+              children: List.generate(profileList.length, (index) {
+                if (index == profileList.length - 1) {
                   return PositionedTransition(
                     rect: RelativeRectTween(
                       begin: RelativeRect.fromSize(
@@ -110,7 +152,7 @@ class _CardsStackWidgetState extends State<CardsStackWidget>
                         ),
                       ),
                       child: DragWidget(
-                        profile: draggableItems[index],
+                        profile: profileList[index],
                         index: index,
                         swipeNotifier: swipeNotifier,
                         isLastCard: true,
@@ -119,7 +161,7 @@ class _CardsStackWidgetState extends State<CardsStackWidget>
                   );
                 } else {
                   return DragWidget(
-                    profile: draggableItems[index],
+                    profile: profileList[index],
                     index: index,
                     swipeNotifier: swipeNotifier,
                   );
@@ -180,7 +222,7 @@ class _CardsStackWidgetState extends State<CardsStackWidget>
             },
             onAccept: (int index) {
               setState(() {
-                draggableItems.removeAt(index);
+                profileList.removeAt(index);
               });
             },
           ),
@@ -203,7 +245,7 @@ class _CardsStackWidgetState extends State<CardsStackWidget>
             },
             onAccept: (int index) {
               setState(() {
-                draggableItems.removeAt(index);
+                profileList.removeAt(index);
               });
             },
           ),

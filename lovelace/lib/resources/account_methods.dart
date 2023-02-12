@@ -30,7 +30,7 @@ class AccountMethods {
       output = e.toString();
     }
 
-    print(output);
+    print("readOutput: $output");
 
     return [output, message, isSuccess];
   }
@@ -77,7 +77,7 @@ class AccountMethods {
       }
     }
     output = json.encode(outputJson);
-    print(output);
+    print("updateOutput: $output");
     return [output, message, isSuccess];
   }
 
@@ -106,7 +106,7 @@ class AccountMethods {
       output = e.toString();
     }
 
-    print(output);
+    print("updateDetailsOutput: $output");
 
     return [output, message, isSuccess];
   }
@@ -138,7 +138,7 @@ class AccountMethods {
       output = e.toString();
     }
 
-    print(output);
+    print("updateFileOutput: $output");
 
     return [output, message, isSuccess];
   }
