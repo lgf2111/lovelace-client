@@ -9,7 +9,6 @@ import 'package:lovelace/resources/user_state_methods.dart';
 import 'package:lovelace/screens/user/login/login_screen.dart';
 import 'package:lovelace/utils/colors.dart';
 import 'package:safe_device/safe_device.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 enum _SupportState {
   unknown,

@@ -1,8 +1,10 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
+import 'package:encrypt/encrypt.dart';
 import 'package:lovelace/resources/storage_methods.dart';
 import 'package:lovelace/utils/global_variables.dart';
+import 'package:pointycastle/pointycastle.dart';
 import 'package:socket_io_client/socket_io_client.dart' as socket_io;
 import 'package:streaming_shared_preferences/streaming_shared_preferences.dart';
 
@@ -38,7 +40,13 @@ void connectAndListen(
       }).build());
 
   socket.onConnect((_) {
-    socket.emit('join', {"user1": senderName, "user2": receiverName});
+    socket.emit('join', {
+      "user1": senderName,
+      "user2": receiverName,
+      // "pubkey1": publicKey1,
+      // "pubkey2": publicKey2,
+      // "message": encryptedMessage
+    });
   });
 
   socket.on('sent', (data) {
@@ -76,7 +84,7 @@ void disconnect(String senderName, String receiverName, String keyName) async {
 }
 
 void sendingMessage(
-  dynamic chatMessageMap, String senderEmail, String receiverEmail) async {
+    dynamic chatMessageMap, String senderEmail, String receiverEmail) async {
   dynamic cookie = await StorageMethods().read("cookie");
   String baseUrl = checkDevice();
 

@@ -12,7 +12,7 @@ class AESkeyMethods {
     final encrypter = Encrypter(AES(key));
 
     final encrypted = encrypter.encrypt(plainText, iv: iv);
-    // print(key.base64); // returns value of key
+    // print(key.base64); // returns value of AES key
     storageMethods.write("key",
         key.base64); // store key in secure storage as base64 encoded String
     storageMethods.write(
@@ -39,22 +39,32 @@ class AESkeyMethods {
 }
 
 class RSAkeyMethods {
-
-  Future publicPem() async {
-    return await rootBundle.loadString('assets/rsa/rsa-public-key.pem');
+  Future receiverPublicPem() async {
+    return await rootBundle.loadString('assets/rsa/receiver-public-key.pem');
   }
 
-  Future privatePem() async {
-    return await rootBundle.loadString('assets/rsa/rsa-private-key.pem');
+  Future receiverPrivatePem() async {
+    return await rootBundle.loadString('assets/rsa/receiver-private-key.pem');
+  }
+
+  Future senderPublicPem() async {
+    return await rootBundle.loadString('assets/rsa/sender-public-key.pem');
+  }
+
+  Future senderPrivatePem() async {
+    return await rootBundle.loadString('assets/rsa/sender-private-key.pem');
   }
 
   Future encryptRSA(plainText) async {
-    final rsaPublicKey = RSAKeyParser().parse(await publicPem()) as RSAPublicKey;
-    final rsaPrivateKey = RSAKeyParser().parse(await privatePem()) as RSAPrivateKey;
+    final rsaPublicKey =
+        RSAKeyParser().parse(await senderPublicPem()) as RSAPublicKey;
+    final rsaPrivateKey =
+        RSAKeyParser().parse(await senderPrivatePem()) as RSAPrivateKey;
 
+    // print out the keys
     // print(rsaPrivateKey);
     // print(rsaPublicKey);
-    
+
     Encrypter encrypter = Encrypter(RSA(
         publicKey: rsaPublicKey,
         privateKey: rsaPrivateKey,
@@ -66,8 +76,10 @@ class RSAkeyMethods {
   }
 
   Future decryptRSA(cipherText) async {
-    final rsaPublicKey = RSAKeyParser().parse(await publicPem()) as RSAPublicKey;
-    final rsaPrivateKey = RSAKeyParser().parse(await privatePem()) as RSAPrivateKey;
+    final rsaPublicKey =
+        RSAKeyParser().parse(await senderPublicPem()) as RSAPublicKey;  
+    final rsaPrivateKey =
+        RSAKeyParser().parse(await senderPrivatePem()) as RSAPrivateKey; 
 
     Encrypter encrypter = Encrypter(RSA(
         publicKey: rsaPublicKey,

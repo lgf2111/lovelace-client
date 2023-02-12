@@ -100,8 +100,8 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   void didChangeAppLifecycleState(AppLifecycleState state) {
     super.didChangeAppLifecycleState(state);
     Future isFTL = storageMethods.read("isFTL");
-    if (state == AppLifecycleState.resumed && (isFTL == false || isFTL == null) ||
-        state == AppLifecycleState.inactive && (isFTL == false || isFTL == null)) {
+    if (state == AppLifecycleState.resumed && (isFTL == false) ||
+        state == AppLifecycleState.inactive && (isFTL == false)) {
       print(state);
       final navigator = _navigatorKey.currentState;
       if (navigator == null) {

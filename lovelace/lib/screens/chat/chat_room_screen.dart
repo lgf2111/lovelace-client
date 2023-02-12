@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:encrypt/encrypt.dart';
 import 'package:flutter/material.dart';
-import 'package:rsa_encrypt/rsa_encrypt.dart';
 import 'package:lovelace/models/user_detail.dart';
 import 'package:lovelace/resources/encryption_methods.dart';
 import 'package:lovelace/resources/storage_methods.dart';
@@ -49,7 +48,7 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
 
   Future<void> getContent() async {
     // StorageMethods storageMethods = StorageMethods();
-    // dynamic overallContent = jsonDecode(await storageMethods.read("message")); 
+    // dynamic overallContent = jsonDecode(await storageMethods.read("message"));
     // if (overallContent.runtimeType == null) {
     //   print('There are no messages');
     // }
@@ -77,7 +76,13 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
     emails.sort();
     keyName = "${emails[0]}&${emails[1]}";
     connectAndListen(
-        senderUserDetails.email, receiverUserDetails.email, keyName);
+      senderUserDetails.email,
+      receiverUserDetails.email,
+      keyName,
+      // rsAkeyMethods.senderPublicPem(),
+      // rsAkeyMethods.receiverPublicPem(),
+      // the encrypted message here
+    );
     getContent();
   }
 
@@ -138,8 +143,8 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
       String newContent = json.encode(oldContent);
       content!.setValue(newContent);
       Encrypted cipherText = await rsAkeyMethods.encryptRSA(newContent);
-      // TODO: Send encrypted message and public key to server side
       // rsAkeyMethods.decryptRSA(cipherText);
+
       chatMessageMap.addAll({
         "room": keyName,
       });
