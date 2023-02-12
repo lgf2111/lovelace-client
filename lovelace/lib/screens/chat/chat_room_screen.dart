@@ -1,9 +1,11 @@
 import 'dart:async';
 import 'dart:convert';
+import 'package:encrypt/encrypt.dart';
 import 'package:flutter/material.dart';
+import 'package:rsa_encrypt/rsa_encrypt.dart';
 import 'package:lovelace/models/user_detail.dart';
+import 'package:lovelace/resources/encryption_methods.dart';
 import 'package:lovelace/resources/storage_methods.dart';
-
 import 'package:lovelace/widgets/chat_stream_socket.dart';
 import 'package:lovelace/widgets/message_tile.dart';
 import 'package:streaming_shared_preferences/streaming_shared_preferences.dart';
@@ -42,20 +44,20 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
 
   ChatStreamSocket chatStreamSocket = ChatStreamSocket();
   StorageMethods storageMethods = StorageMethods();
-
+  RSAkeyMethods rsAkeyMethods = RSAkeyMethods();
   TextEditingController messageController = TextEditingController();
 
   Future<void> getContent() async {
-    StorageMethods storageMethods = StorageMethods();
-    dynamic overallContent = jsonDecode(await storageMethods.read("message")); 
-    if (overallContent.runtimeType == null) {
-      print('There are no messages');
-    }
-    overallContent.push(content!.getValue()); // this won't work
+    // StorageMethods storageMethods = StorageMethods();
+    // dynamic overallContent = jsonDecode(await storageMethods.read("message")); 
+    // if (overallContent.runtimeType == null) {
+    //   print('There are no messages');
+    // }
+    // overallContent.push(content!.getValue()); // this won't work
     preferences = await StreamingSharedPreferences.instance;
     content = preferences!.getString(keyName, defaultValue: "[]");
     setState(() {
-      initialData = overallContent;
+      initialData = content!.getValue();
     });
     print(initialData); // returns the messages in the chat
   }
@@ -135,12 +137,14 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
       oldContent.add(chatMessageMap);
       String newContent = json.encode(oldContent);
       content!.setValue(newContent);
-      print('newContent: $newContent');
+      // print('newContent: ${newContent.runtimeType}'); // return String
+      Encrypted cipherText = await rsAkeyMethods.encryptRSA(newContent);
+      // rsAkeyMethods.decryptRSA(cipherText);
       chatMessageMap.addAll({
         "room": keyName,
       });
 
-      print(content);
+      // print(content);
       sendingMessage(
           chatMessageMap, senderUserDetails.email, receiverUserDetails.email);
       storageMethods.write("message", newContent);
@@ -178,6 +182,7 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
                           TextButton(
                               onPressed: () {
                                 content!.setValue("[]");
+                                storageMethods.delete("message");
                                 Navigator.pop(context);
                               },
                               child: const Text("Confirm")),

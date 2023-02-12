@@ -70,8 +70,9 @@ dependencies:
   url_launcher: ^6.1.8
   safe_device: ^1.1.2
   location_permissions: ^4.0.1
-  rsa_encrypt: ^2.0.0
   pointycastle: ^3.6.2
+  mz_rsa_plugin: ^0.0.4
+  rsa_encrypt: ^2.0.0
 
 dev_dependencies:
   flutter_test:
@@ -120,6 +121,8 @@ flutter:
   assets:
     - assets/images/
     - assets/ca/ec2-cert.pem
+    - assets/rsa/rsa-private-key.pem
+    - assets/rsa/rsa-public-key.pem
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
 

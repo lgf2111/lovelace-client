@@ -76,7 +76,7 @@ void disconnect(String senderName, String receiverName, String keyName) async {
 }
 
 void sendingMessage(
-    dynamic chatMessageMap, String senderEmail, String receiverEmail) async {
+  dynamic chatMessageMap, String senderEmail, String receiverEmail) async {
   dynamic cookie = await StorageMethods().read("cookie");
   String baseUrl = checkDevice();
 

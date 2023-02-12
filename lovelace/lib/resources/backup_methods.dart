@@ -5,7 +5,7 @@ import 'package:lovelace/resources/encryption_methods.dart';
 import 'package:path_provider/path_provider.dart';
 
 class BackupMethods {
-  EncryptionDecryption encryptionDecryption = EncryptionDecryption();
+  AESkeyMethods aeSkeyMethods = AESkeyMethods();
   Future get _localPath async {
     Directory? directory = await getExternalStorageDirectory();
     // print(directory?.path);
@@ -35,7 +35,7 @@ class BackupMethods {
     String jsonString = await file.readAsString(); // returns ciphertext as a base64 String
     // print(jsonString); // return the ciphertext as a String
     // print(jsonString.runtimeType); // returns String
-    var plaintext = await encryptionDecryption.decryptAES(jsonString); // decrypt the ciphertext
+    var plaintext = await aeSkeyMethods.decryptAES(jsonString); // decrypt the ciphertext
     print(plaintext.runtimeType);
     print(plaintext);
     // Map<String, dynamic> jsonMap = jsonDecode(jsonString);
@@ -48,7 +48,7 @@ class BackupMethods {
     debugPrint('Writing data to JSON file');
     Map<String, dynamic> jsonMap = {"Messages": messages};
     String jsonString = jsonEncode(jsonMap); // jsonEncode the map
-    var encrypted = await encryptionDecryption.encryptAES(jsonString); // returns a base64 String of the ciphertext
+    var encrypted = await aeSkeyMethods.encryptAES(jsonString); // returns a base64 String of the ciphertext
     print(encrypted); // print the base64 encoded String 
     await file.writeAsString(encrypted); // write the base64 String to the JSON file
     debugPrint('Data written to JSON file');

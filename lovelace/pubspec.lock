@@ -728,6 +728,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.4"
+  mz_rsa_plugin:
+    dependency: "direct main"
+    description:
+      name: mz_rsa_plugin
+      sha256: fc16e9a1fa9fe31afe3d65da9a6710188209d01791a0988a77a27a482159dd9b
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.4"
   package_config:
     dependency: transitive
     description:
