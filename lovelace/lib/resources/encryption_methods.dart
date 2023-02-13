@@ -2,7 +2,6 @@ import 'package:encrypt/encrypt.dart';
 import 'package:flutter/services.dart';
 import 'package:lovelace/resources/storage_methods.dart';
 import 'package:pointycastle/export.dart';
-import 'package:rsa_encrypt/rsa_encrypt.dart';
 
 class AESkeyMethods {
   StorageMethods storageMethods = StorageMethods();
