@@ -69,15 +69,15 @@ class _AccountSettingsScreenState extends State<AccountSettingsScreen> {
                   setState(() {
                     isSuccess = false;
                   });
-                } else { // if there is a backup file
-                  storageMethods.write("message", response);
+                } else {
+                  print('response: $response');
                 }
                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                   content: Text(message),
                   backgroundColor: isSuccess ? blackColor : errorColor,
                 ));
                 // Send the backup file data to secure storage
-                storageMethods.read("message");
+                // storageMethods.read("message");
               }),
           WideButton(
               icon: const Icon(Icons.exit_to_app, color: placeholderColor),

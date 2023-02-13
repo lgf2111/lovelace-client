@@ -37,13 +37,12 @@ class BackupMethods {
     // print(jsonString.runtimeType); // returns String
     var plaintext = await aeSkeyMethods.decryptAES(jsonString); // decrypt the ciphertext
     // print(plaintext.runtimeType);
-    print(plaintext);
     // Map<String, dynamic> jsonMap = jsonDecode(jsonString);
     debugPrint('Data read from JSON file');
-    // return jsonMap;
+    return plaintext;
   }
 
-  Future<void> writeJsonFile(List messages) async {
+  Future<void> writeJsonFile(messages) async {
     final file = await _localFile;
     debugPrint('Writing data to JSON file');
     Map<String, dynamic> jsonMap = {"Messages": messages};
