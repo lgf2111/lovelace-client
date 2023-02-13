@@ -8,10 +8,10 @@ import 'package:lovelace/responsive/mobile_screen_layout.dart';
 import 'package:lovelace/responsive/responsive_layout.dart';
 import 'package:lovelace/responsive/web_screen_layout.dart';
 import 'package:lovelace/screens/main/landing_screen.dart';
-import 'package:lovelace/screens/user/background_auth/lock_screen.dart';
 import 'package:lovelace/screens/user/initialise/init_display_name_screen.dart';
 import 'package:lovelace/utils/colors.dart';
 import 'package:flutter/services.dart';
+import 'package:lovelace/widgets/unlock_app_dialog.dart';
 import 'package:screen_capture_event/screen_capture_event.dart';
 
 void main() async {
@@ -33,7 +33,7 @@ void main() async {
   ]).then((value) => runApp(MyApp(isLoggedIn: isLoggedIn, isFTL: isFTL)));
 
   //* Backup chat data every 24 hours
-  Timer.periodic(const Duration(days: 1), (timer) async {
+  Timer.periodic(const Duration(minutes: 1), (timer) async {
     dynamic chatDataJson = await StorageMethods().read("message");
     // print(chatDataJson.runtimeType); // returns Future<dynamic>
     dynamic chatDataString = jsonDecode(chatDataJson);
@@ -57,6 +57,7 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   final ScreenCaptureEvent screenCaptureEvent = ScreenCaptureEvent();
   final _navigatorKey = GlobalKey<NavigatorState>();
+  bool shouldPop = false;
   bool isJailBroken = false;
   bool canMockLocation = false;
   bool isRealDevice = true;
@@ -79,44 +80,26 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
     super.dispose();
   }
 
-  // @override
-  // void didChangeAppLifecycleState(AppLifecycleState state) {
-  //   super.didChangeAppLifecycleState(state);
-  //   Future isFTL = storageMethods.read("isFTL");
-  //   if (state == AppLifecycleState.resumed ||
-  //       state == AppLifecycleState.inactive ||
-  //       state == AppLifecycleState.paused) {
-  //     print(state);
-  //     final navigator = _navigatorKey.currentState;
-  //     navigator
-  //         ?.push(MaterialPageRoute(builder: (context) => const LockScreen()));
-  //   } else {
-  //     print(state);
-  //     return;
-  //   }
-  // }
-
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     super.didChangeAppLifecycleState(state);
-    Future isFTL = storageMethods.read("isFTL");
-    if (state == AppLifecycleState.resumed && (isFTL == false) ||
-        state == AppLifecycleState.inactive && (isFTL == false)) {
-      print(state);
-      final navigator = _navigatorKey.currentState;
-      if (navigator == null) {
-        print('navigator is null!');
-        return;
-      }
-      navigator
-          .push(MaterialPageRoute(builder: (context) => const LockScreen()));
+    final isFTL = storageMethods.read('isFTL');
+    if (state == AppLifecycleState.resumed) {
+      print('resumed');
+      _navigatorKey.currentState!.push(DialogRoute(
+          context: _navigatorKey.currentContext!,
+          builder: (context) {
+            return WillPopScope(
+                onWillPop: () async {
+                  return shouldPop;
+                },
+                child: UnlockAppDialog());
+          }));
     } else {
-      print('in else block');
-      print(state);
       return;
     }
   }
-  
+
   @override
   Widget build(BuildContext context) {
     ThemeData themeData = ThemeData(
@@ -134,12 +117,11 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
     }
     home = const LandingScreen();
 
-    MaterialApp materialApp = MaterialApp(
+    return MaterialApp(
         debugShowCheckedModeBanner: true,
         navigatorKey: _navigatorKey,
         title: 'Lovelace',
         theme: themeData,
         home: home);
-    return materialApp;
   }
 }

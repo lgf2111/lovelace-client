@@ -58,7 +58,7 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
     setState(() {
       initialData = content!.getValue();
     });
-    print(initialData); // returns the messages in the chat
+    // print(initialData); // returns the messages in the chat
   }
 
   getSenderUserDetails() async {
@@ -79,9 +79,6 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
       senderUserDetails.email,
       receiverUserDetails.email,
       keyName,
-      // rsAkeyMethods.senderPublicPem(),
-      // rsAkeyMethods.receiverPublicPem(),
-      // the encrypted message here
     );
     getContent();
   }
@@ -142,7 +139,8 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
       oldContent.add(chatMessageMap);
       String newContent = json.encode(oldContent);
       content!.setValue(newContent);
-      Encrypted cipherText = await rsAkeyMethods.encryptRSA(newContent);
+      var cipherText = await rsAkeyMethods.encryptRSA(newContent);
+      // Encrypted cipherText = await rsAkeyMethods.encryptRSA(newContent);
       // rsAkeyMethods.decryptRSA(cipherText);
 
       chatMessageMap.addAll({

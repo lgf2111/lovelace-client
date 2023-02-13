@@ -2,13 +2,14 @@ import 'package:encrypt/encrypt.dart';
 import 'package:flutter/services.dart';
 import 'package:lovelace/resources/storage_methods.dart';
 import 'package:pointycastle/export.dart';
+import 'package:rsa_encrypt/rsa_encrypt.dart';
 
 class AESkeyMethods {
   StorageMethods storageMethods = StorageMethods();
 
   Future encryptAES(plainText) async {
-    final key = Key.fromSecureRandom(32);
-    final iv = IV.fromSecureRandom(16);
+    final key = Key.fromSecureRandom(32); // 256-bit key
+    final iv = IV.fromSecureRandom(16); // 12-bit iv
     final encrypter = Encrypter(AES(key));
 
     final encrypted = encrypter.encrypt(plainText, iv: iv);
@@ -62,8 +63,9 @@ class RSAkeyMethods {
         RSAKeyParser().parse(await senderPrivatePem()) as RSAPrivateKey;
 
     // print out the keys
-    // print(rsaPrivateKey);
-    // print(rsaPublicKey);
+    // print(RsaKeyHelper().encodePublicKeyToPemPKCS1(rsaPublicKey)); 
+    // print(RsaKeyHelper().encodePrivateKeyToPemPKCS1(rsaPrivateKey));
+
 
     Encrypter encrypter = Encrypter(RSA(
         publicKey: rsaPublicKey,
@@ -71,7 +73,7 @@ class RSAkeyMethods {
         encoding: RSAEncoding.OAEP));
     Encrypted encrypted = encrypter.encrypt(plainText);
     print('Message encrypted successfully!');
-    // print(encrypted.base64); // data type String
+    print(encrypted.base64); // data type String
     return encrypted; // return as 'Encrypted' data type
   }
 
