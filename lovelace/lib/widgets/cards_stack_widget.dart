@@ -52,6 +52,7 @@ class _CardsStackWidgetState extends State<CardsStackWidget>
   void getProfileList() async {
     List<Profile> profileList_ = [];
     List<dynamic> getProfileList = await recoMethods.getProfileList();
+    print(getProfileList);
     Map<dynamic, dynamic> getProfileListJson = json.decode(getProfileList[0]);
     List<dynamic> resultsJson = getProfileListJson['results'];
     for (int i = 0; i < resultsJson.length; i++) {
