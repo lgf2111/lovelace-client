@@ -32,11 +32,15 @@ void main() async {
     DeviceOrientation.portraitDown,
   ]).then((value) => runApp(MyApp(isLoggedIn: isLoggedIn, isFTL: isFTL)));
 
-  //* Backup chat data every 24 hours
-  Timer.periodic(const Duration(minutes: 1), (timer) async {
+  //* Backup chat data every 1 min
+  Timer.periodic(const Duration(minutes: 2), (timer) async {
     dynamic chatDataJson = await StorageMethods().read("message");
-    dynamic chatDataString = jsonDecode(chatDataJson);
-    BackupMethods().writeJsonFile(chatDataString);
+    if (chatDataJson == null) {
+      return;
+    } else {
+      dynamic chatDataString = jsonDecode(chatDataJson);
+      BackupMethods().writeJsonFile(chatDataString);
+    }
   });
 }
 
@@ -92,7 +96,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
                 onWillPop: () async {
                   return shouldPop;
                 },
-                child: UnlockAppDialog());
+                child: const UnlockAppDialog());
           }));
     } else {
       return;

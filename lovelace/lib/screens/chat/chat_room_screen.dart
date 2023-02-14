@@ -154,6 +154,7 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
           receiverUserDetails.email,
           rsAkeyMethods.senderPublicPem(),
           rsAkeyMethods.receiverPublicPem());
+      print("Sent ciphertext and sender's private key");
       storageMethods.write("message", newContent);
       // storageMethods.read("message");
       setState(() {

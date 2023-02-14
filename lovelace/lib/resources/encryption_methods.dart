@@ -65,7 +65,6 @@ class RSAkeyMethods {
     // print(RsaKeyHelper().encodePublicKeyToPemPKCS1(rsaPublicKey)); 
     // print(RsaKeyHelper().encodePrivateKeyToPemPKCS1(rsaPrivateKey));
 
-
     Encrypter encrypter = Encrypter(RSA(
         publicKey: rsaPublicKey,
         privateKey: rsaPrivateKey,
