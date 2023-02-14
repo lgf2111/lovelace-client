@@ -57,12 +57,12 @@ class RSAkeyMethods {
 
   Future encryptRSA(plainText) async {
     final rsaPublicKey =
-        RSAKeyParser().parse(await senderPublicPem()) as RSAPublicKey;
+        RSAKeyParser().parse(await receiverPublicPem()) as RSAPublicKey;
     final rsaPrivateKey =
-        RSAKeyParser().parse(await senderPrivatePem()) as RSAPrivateKey;
+        RSAKeyParser().parse(await receiverPrivatePem()) as RSAPrivateKey;
 
     // print out the keys
-    // print(RsaKeyHelper().encodePublicKeyToPemPKCS1(rsaPublicKey)); 
+    // print(RsaKeyHelper().encodePublicKeyToPemPKCS1(rsaPublicKey));
     // print(RsaKeyHelper().encodePrivateKeyToPemPKCS1(rsaPrivateKey));
 
     Encrypter encrypter = Encrypter(RSA(
@@ -77,9 +77,9 @@ class RSAkeyMethods {
 
   Future decryptRSA(cipherText) async {
     final rsaPublicKey =
-        RSAKeyParser().parse(await senderPublicPem()) as RSAPublicKey;  
+        RSAKeyParser().parse(await senderPublicPem()) as RSAPublicKey;
     final rsaPrivateKey =
-        RSAKeyParser().parse(await senderPrivatePem()) as RSAPrivateKey; 
+        RSAKeyParser().parse(await senderPrivatePem()) as RSAPrivateKey;
 
     Encrypter encrypter = Encrypter(RSA(
         publicKey: rsaPublicKey,

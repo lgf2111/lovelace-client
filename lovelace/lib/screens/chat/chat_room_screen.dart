@@ -29,8 +29,8 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
   );
   UserDetails receiverUserDetails = UserDetails(
     email: "213587x@gmail.com",
-    displayName: "Paimon",
-    birthday: "01-01-2001",
+    displayName: "Cheryl Ong",
+    birthday: "12-02-2000",
     gender: "Female",
     location: "Singapore",
     profilePic: "",
@@ -128,8 +128,10 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
 
   dynamic sendMessage() async {
     if (messageController.text.isNotEmpty) {
+      var cipherText = await rsAkeyMethods.encryptRSA(messageController.text);
+
       Map<String, dynamic> chatMessageMap = {
-        "message": messageController.text,
+        "message": cipherText.base64,
         "sender": senderUserDetails.displayName,
         "receiver": receiverUserDetails.displayName,
         "time": DateTime.now().millisecondsSinceEpoch,
