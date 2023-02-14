@@ -32,7 +32,7 @@ void main() async {
     DeviceOrientation.portraitDown,
   ]).then((value) => runApp(MyApp(isLoggedIn: isLoggedIn, isFTL: isFTL)));
 
-  //* Backup chat data every 1 min
+  //* Backup chat data every 2 minutes
   Timer.periodic(const Duration(minutes: 2), (timer) async {
     dynamic chatDataJson = await StorageMethods().read("message");
     if (chatDataJson == null) {
