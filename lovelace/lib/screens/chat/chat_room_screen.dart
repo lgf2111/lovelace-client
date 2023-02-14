@@ -78,7 +78,7 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
     connectAndListen(
       senderUserDetails.email,
       receiverUserDetails.email,
-      keyName,
+      keyName
     );
     getContent();
   }
@@ -139,7 +139,6 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
       oldContent.add(chatMessageMap);
       String newContent = json.encode(oldContent);
       content!.setValue(newContent);
-      var cipherText = await rsAkeyMethods.encryptRSA(newContent);
       // Encrypted cipherText = await rsAkeyMethods.encryptRSA(newContent);
       // rsAkeyMethods.decryptRSA(cipherText);
 
