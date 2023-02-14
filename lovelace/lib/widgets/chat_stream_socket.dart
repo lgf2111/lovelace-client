@@ -30,7 +30,6 @@ void connectAndListen(
       await StreamingSharedPreferences.instance;
   Preference<String> content =
       preferences.getString(keyName, defaultValue: "[]");
-
   socket_io.Socket socket = socket_io.io(
       Uri.http(baseUrl, '/chat').toString(),
       socket_io.OptionBuilder().setTransports(['websocket']).setExtraHeaders({
