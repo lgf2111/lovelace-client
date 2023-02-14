@@ -84,10 +84,16 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   }
 
   @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
+  void didChangeAppLifecycleState(AppLifecycleState state) async {
     super.didChangeAppLifecycleState(state);
-    final isFTL = storageMethods.read('isFTL');
-    if (state == AppLifecycleState.resumed && isFTL == false) {
+    bool isLoggedIn =
+        json.decode(await storageMethods.read('isLoggedIn') ?? 'false');
+    bool isFTL = json.decode(await storageMethods.read('isFTL') ?? 'false');
+
+    print("$isLoggedIn");
+    if (state == AppLifecycleState.resumed &&
+        isLoggedIn == true &&
+        isFTL == false) {
       print('resumed');
       _navigatorKey.currentState!.push(DialogRoute(
           context: _navigatorKey.currentContext!,

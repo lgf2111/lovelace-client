@@ -38,10 +38,8 @@ void connectAndListen(
       }).build());
 
   socket.onConnect((_) {
-    socket.emit('join', {
-      "user1": senderName,
-      "user2": receiverName,
-    });
+    socket.emit('join',
+        {"user1": senderName, "user2": receiverName, "pubKey": "HELLOWORLD"});
   });
 
   socket.on('sent', (data) {
